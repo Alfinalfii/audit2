@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counting System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+
+        /* Container for video player and sections */
+        .container-fluid {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: stretch;
+        }
+
+        /* Media player container */
+        .media-player-container {
+            flex: 8; /* 80% of available space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Video player */
+        .media-player {
+            width: 100%;
+            height: 90vh;
+            object-fit: cover;
+        }
+
+        /* Video controls */
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+            margin-bottom: 18px;
+        }
+
+        /* Container for sections */
+        .section-container {
+            flex: 2; /* 20% of available space */
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        /* Section boxes */
+        .section-box {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        /* Style for buttons and inputs within sections */
+        .section-box .button.add-button {
+            margin: 5px;
+            background-color: green;
+            color: white;
+            border: none;
+        }
+
+        .section-box .button.delete-button {
+            margin: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- Left column: Video Player -->
+    <div class="media-player-container">
+        <video id="videoPlayer" controls class="media-player">
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-controls">
+            <button onclick="skipBackward()">Skip Backward</button>
+            <button id="playPauseButton" onclick="togglePlayPause()">Play</button>
+            <button onclick="skipForward()">Skip Forward</button>
+            <button id="forwardSpeedButton" onclick="changeSpeed(1)">Forward Speed (+1x)</button>
+            <button id="rewindButton">Rewind (-5s)</button>
+            <button id="browseButton" onclick="openFileInput()">Browse Files</button>
+            <!-- File input for video selection -->
+            <input type="file" id="fileInput" accept="video/*" onchange="handleFileInputChange(event)">
+        </div>
+    </div>
+
+    <!-- Right column: Sections -->
+    <div class="section-container">
+        <!-- Penrith Section -->
+        <div class="section-box">
+            <input type="checkbox" id="penrithCheckbox" onchange="toggleSection('penrith', this.checked)">
+            <label class="checkbox-label" for="penrithCheckbox">Penrith</label>
+
+            <div class="penrith" style="display: none;">
+                <!-- Content for the Penrith section -->
+                <div class="row">
+                    <div class="row1">
+                        <span class="section-label">Person:</span>
+                        <input id="counter1" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(1)">Add Person</button>
+                        <button class="button delete-button" onclick="subtractCounter(1)">Delete Person</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row2">
+                        <span class="section-label">Self Service:</span>
+                        <input id="counter2" class="counter" type="text" value="0" size="15">
+                        <button class="button add-button" onclick="addCounter(2)">Add Self</button>
+                        <button class="button delete-button" onclick="subtractCounter(2)">Delete Self</button>
+                    </div>
+                </div>
+
+                <button class="button" onclick="resetCounters(1, 2)">Reset</button>
+            </div>
+        </div>
+
+        <!-- Macquarie Section -->
+        <div class="section-box">
+            <input type="checkbox" id="macquarieCheckbox" onchange="toggleSection('macquarie', this.checked)">
+            <label class="checkbox-label" for="macquarieCheckbox">Macquarie</label>
+
+            <div class="macquarie" style="display: none;">
+                <!-- Content for the Macquarie section -->
+                <div class="row">
+                    <div class="row3">
+                        <span class="section-label">Person:</span>
+                        <input id="counter3" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(3)">Add Person</button>
+                        <button class="button delete-button" onclick="subtractCounter(3)">Delete Person</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row4">
+                        <span class="section-label">Self Service:</span>
+                        <input id="counter4" class="counter" type="text" value="0" size="15">
+                        <button class="button add-button" onclick="addCounter(4)">Add Self</button>
+                        <button class="button delete-button" onclick="subtractCounter(4)">Delete Self</button>
+                    </div>
+                </div>
+
+                <button class="button" onclick="resetCounters(3, 4)">Reset</button>
+            </div>
+        </div>
+
+        <!-- Modbury Section -->
+        <div class="section-box">
+            <input type="checkbox" id="modburyCheckbox" onchange="toggleSection('modbury', this.checked)">
+            <label class="checkbox-label" for="modburyCheckbox">Modbury</label>
+
+            <div class="modbury" style="display: none;">
+                <!-- Content for the Modbury section -->
+                <div class="row">
+                    <div class="row5">
+                        <span class="section-label">Person:</span>
+                        <input id="counter5" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(5)">Add Person</button>
+                        <button class="button delete-button" onclick="subtractCounter(5)">Delete Person</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row6">
+                        <span class="section-label">Self Service:</span>
+                        <input id="counter6" class="counter" type="text" value="0" size="15">
+                        <button class="button add-button" onclick="addCounter(6)">Add Self</button>
+                        <button class="button delete-button" onclick="subtractCounter(6)">Delete Self</button>
+                    </div>
+                </div>
+
+                <button class="button" onclick="resetCounters(5, 6)">Reset</button>
+            </div>
+        </div>
+
+        <!-- Penrith Car Section -->
+        <div class="section-box">
+            <input type="checkbox" id="penrithCarCheckbox" onchange="toggleSection('penrithCar', this.checked)">
+            <label class="checkbox-label" for="penrithCarCheckbox">Penrith Car</label>
+
+            <div class="penrithCar" style="display: none;">
+                <!-- Content for the Penrith Car section -->
+                <div class="row">
+                    <div class="row7">
+                        <span class="section-label">Code 1:</span>
+                        <input id="counter7" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(7)">Add Car</button>
+                        <button class="button delete-button" onclick="subtractCounter(7)">Delete Car</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row8">
+                        <span class="section-label">Code 2:</span>
+                        <input id="counter8" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(8)">Add Car</button>
+                        <button class="button delete-button" onclick="subtractCounter(8)">Delete Car</button>
+                    </div>
+                </div>
+
+                <button class="button" onclick="resetCounters(7, 8)">Reset</button>
+            </div>
+        </div>
+
+        <!-- Modbury Car Section -->
+        <div class="section-box">
+            <input type="checkbox" id="modburyCarCheckbox" onchange="toggleSection('modburyCar', this.checked)">
+            <label class="checkbox-label" for="modburyCarCheckbox">Modbury Car</label>
+
+            <div class="modburyCar" style="display: none;">
+                <!-- Content for the Modbury Car section -->
+                <div class="row">
+                    <div class="row9">
+                        <span class="section-label">Code 1:</span>
+                        <input id="counter9" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(9)">Add Car</button>
+                        <button class="button delete-button" onclick="subtractCounter(9)">Delete Car</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row10">
+                        <span class="section-label">Code 2:</span>
+                        <input id="counter10" class="counter" type="text" value="0">
+                        <button class="button add-button" onclick="addCounter(10)">Add Car</button>
+                        <button class="button delete-button" onclick="subtractCounter(10)">Delete Car</button>
+                    </div>
+                </div>
+
+                <button class="button" onclick="resetCounters(9, 10)">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Your JavaScript code -->
+<script>
+ const videoPlayer = document.getElementById('videoPlayer');
+    const playPauseButton = document.getElementById('playPauseButton');
+    const forwardSpeedButton = document.getElementById('forwardSpeedButton');
+
+    let playbackRate = 1; // Initial playback rate
+
+    // Function to toggle play/pause on space bar press
+    document.addEventListener('keydown', (event) => {
+        if (event.key === ' ' || event.key === 'Spacebar') {
+            event.preventDefault(); // Prevent space bar from scrolling the page
+            togglePlayPause();
+        } else if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            skipForward();
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            skipBackward();
+        }
+    });
+
+    // Function to toggle play/pause
+    function togglePlayPause() {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+            playPauseButton.textContent = 'Pause';
+        } else {
+            videoPlayer.pause();
+            playPauseButton.textContent = 'Play';
+        }
+    }
+
+    // Function to skip forward by 5 seconds
+    function skipForward() {
+        videoPlayer.currentTime += 5;
+    }
+
+    // Function to skip backward by 5 seconds
+    function skipBackward() {
+        videoPlayer.currentTime -= 5;
+    }
+
+    // Function to increase playback speed
+    function increaseSpeed() {
+        playbackRate += 1;
+        if (playbackRate > 5) {
+            playbackRate = 1;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    }
+
+    // Function to decrease playback speed
+    function decreaseSpeed() {
+        playbackRate -= 1;
+        if (playbackRate < 1) {
+            playbackRate = 5;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    }
+
+    // Function to rewind the video by 5 seconds
+    function rewind() {
+        videoPlayer.currentTime -= 5;
+    }
+
+    // Function to update the speed button label
+    function updateSpeedButtonLabel() {
+        forwardSpeedButton.textContent = `Forward Speed (+${playbackRate}x)`;
+    }
+
+    // Function to handle file input change
+    function handleFileInputChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const objectURL = URL.createObjectURL(file);
+            videoPlayer.src = objectURL;
+            videoPlayer.currentTime = 0; // Reset the video to the beginning
+            videoPlayer.play();
+            playPauseButton.textContent = 'Pause';
+            playbackRate = 1; // Reset playback speed to normal
+            updateSpeedButtonLabel();
+            videoPlayer.playbackRate = playbackRate;
+        }
+    }
+
+    // Function to open file input when button is clicked
+    function openFileInput() {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+    }
+
+    // Trigger the file input when the video is clicked
+    videoPlayer.addEventListener('click', () => {
+        openFileInput();
+    });
+
+    // Initial update of speed button label
+    updateSpeedButtonLabel();
+
+    // Event listener for forward speed button
+    forwardSpeedButton.addEventListener('click', increaseSpeed);
+
+    // Your other functions for managing counters and sections go here
+
+    function toggleSection(sectionId, show) {
+            const section = document.querySelector(`.${sectionId}`);
+            section.style.display = show ? 'block' : 'none';
+        }
+
+        function updateCounterDisplay(counterId, value) {
+            document.getElementById(counterId).value = value;
+        }
+
+        function addCounter(counterId) {
+            const currentCounterValue = parseInt(document.getElementById(`counter${counterId}`).value);
+            updateCounterDisplay(`counter${counterId}`, currentCounterValue + 1);
+        }
+
+        function subtractCounter(counterId) {
+            const currentCounterValue = parseInt(document.getElementById(`counter${counterId}`).value);
+            if (currentCounterValue > 0) {
+                updateCounterDisplay(`counter${counterId}`, currentCounterValue - 1);
+            }
+        }
+
+        function resetCounters(counterId1, counterId2) {
+            updateCounterDisplay(`counter${counterId1}`, 0);
+            updateCounterDisplay(`counter${counterId2}`, 0);
+        }
+</script>
+</body>
+</html>
