@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Time Tracker</title>
+<style>
+.container {
+  margin-top: 20px;
+}
+
+.box {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.box label {
+  font-weight: bold;
+}
+
+.box .time-entry {
+  margin-top: 20px;
+}
+
+.time-row {
+  display: flex;
+}
+
+.time-column {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.time-subrow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.time-subrow label {
+  margin-right: 5px;
+}
+
+.time-input {
+  width: 150px; /* Adjust width to accommodate seconds */
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.reset-button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.add-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  float: right;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="box" id="kimitsu">
+      <input type="checkbox" id="kimitsu-checkbox" class="box-checkbox" onclick="toggleBox('kimitsu')">
+      <label for="kimitsu-checkbox">Show Kimitsu</label>
+      <div class="time-entry hidden">
+        <div class="time-row">
+          <div class="time-column">
+            <h3>Entry</h3>
+            <div class="time-subrow">
+              <label for="kimitsu-entry-in">In:</label>
+              <input type="time" id="kimitsu-entry-in" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'entry', 'in')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-entry-in')">Reset</button>
+            </div>
+            <div class="time-subrow">
+              <label for="kimitsu-entry-out">Out:</label>
+              <input type="time" id="kimitsu-entry-out" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'entry', 'out')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-entry-out')">Reset</button>
+            </div>
+          </div>
+          <div class="time-column">
+            <h3>Order</h3>
+            <div class="time-subrow">
+              <label for="kimitsu-order-in">In:</label>
+              <input type="time" id="kimitsu-order-in" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'order', 'in')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-order-in')">Reset</button>
+            </div>
+            <div class="time-subrow">
+              <label for="kimitsu-order-out">Out:</label>
+              <input type="time" id="kimitsu-order-out" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'order', 'out')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-order-out')">Reset</button>
+            </div>
+          </div>
+          <div class="time-column">
+            <h3>Pickup</h3>
+            <div class="time-subrow">
+              <label for="kimitsu-pickup-in">In:</label>
+              <input type="time" id="kimitsu-pickup-in" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'pickup', 'in')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-pickup-in')">Reset</button>
+            </div>
+            <div class="time-subrow">
+              <label for="kimitsu-pickup-out">Out:</label>
+              <input type="time" id="kimitsu-pickup-out" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'pickup', 'out')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-pickup-out')">Reset</button>
+            </div>
+          </div>
+          <div class="time-column">
+            <h3>Exit</h3>
+            <div class="time-subrow">
+              <label for="kimitsu-exit-in">In:</label>
+              <input type="time" id="kimitsu-exit-in" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'exit', 'in')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-exit-in')">Reset</button>
+            </div>
+            <div class="time-subrow">
+              <label for="kimitsu-exit-out">Out:</label>
+              <input type="time" id="kimitsu-exit-out" class="time-input" name="appt-time" step="2">
+              <button class="submit-button" onclick="submitTime('kimitsu', 'exit', 'out')">Submit</button>
+              <button class="reset-button" onclick="resetTime('kimitsu-exit-out')">Reset</button>
+            </div>
+          </div>
+          <div class="time-column">
+            <h3>Remarks</h3>
+            <div class="time-subrow">
+              <input type="text" id="kimitsu-remarks" class="time-input" placeholder="Enter remarks">
+            </div>
+          </div>
+        </div>
+        <div class="time-row">
+          <div class="time-column">
+            <button class="add-button" onclick="addRow()">Add Row</button>
+          </div>
+        </div>
+        <table id="spreadsheet">
+          <thead>
+            <tr>
+              <!--th>Serial No.</th-->
+              <th>Entry In</th>
+              <th>Entry Out</th>
+              <th>Order In</th>
+              <th>Order Out</th>
+              <th>Pickup In</th>
+              <th>Pickup Out</th>
+              <th>Exit In</th>
+              <th>Exit Out</th>
+              <th>Remarks</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Spreadsheet rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+function toggleBox(boxId) {
+  const checkbox = document.getElementById(boxId + "-checkbox");
+  const content = document.getElementById(boxId).querySelectorAll(".time-entry");
+  content.forEach(entry => {
+    entry.classList.toggle("hidden", !checkbox.checked);
+  });
+}
+function submitTime(inputId) {
+  const inputElement = document.getElementById(inputId);
+  const tableBody = document.querySelector("#spreadsheet tbody");
+  const newRow = document.createElement("tr");
+
+  // Serial Number Cell
+  /*const serialNumberCell = document.createElement("td");
+  serialNumberCell.textContent = tableBody.rows.length + 1; // Incrementing the row count for serial number
+  newRow.appendChild(serialNumberCell);*/
+
+  const timeInputs = ['entry', 'order', 'pickup', 'exit'];
+
+  for (const timeType of timeInputs) {
+    const inTime = document.getElementById(`kimitsu-${timeType}-in`).value;
+    const outTime = document.getElementById(`kimitsu-${timeType}-out`).value;
+
+    const inCell = document.createElement("td");
+    inCell.textContent = inTime;
+
+    const outCell = document.createElement("td");
+    outCell.textContent = outTime;
+
+    newRow.appendChild(inCell);
+    newRow.appendChild(outCell);
+  }
+
+  // Remarks Cell
+  const remarks = document.getElementById(`kimitsu-remarks`).value;
+  const remarksCell = document.createElement("td");
+  remarksCell.textContent = remarks;
+  newRow.appendChild(remarksCell);
+
+  // Action Cell
+  const actionCell = document.createElement("td");
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.onclick = function() {
+    deleteRow(newRow);
+    updateSerialNumbers();
+  };
+  actionCell.appendChild(deleteButton);
+  newRow.appendChild(actionCell);
+
+  tableBody.appendChild(newRow);
+}
+
+
+
+function resetTime(inputId) {
+  const inputElement = document.getElementById(inputId);
+  inputElement.value = "";
+}
+
+function addRow() {
+  const tableBody = document.querySelector("#spreadsheet tbody");
+  const newRow = document.createElement("tr");
+
+  // Serial Number Cell
+  //const serialNumberCell = document.createElement("td");
+  //serialNumberCell.textContent = tableBody.rows.length + 1; // Incrementing the row count for serial number
+ // newRow.appendChild(serialNumberCell);
+
+  // Empty cells for time inputs
+  for (let i = 0; i < 8; i++) {
+    const emptyCell = document.createElement("td");
+    newRow.appendChild(emptyCell);
+  }
+
+  // Empty cell for remarks
+  const remarksCell = document.createElement("td");
+  newRow.appendChild(remarksCell);
+
+  // Action Cell
+  const actionCell = document.createElement("td");
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.onclick = function() {
+    deleteRow(newRow);
+    updateSerialNumbers();
+  };
+  actionCell.appendChild(deleteButton);
+  newRow.appendChild(actionCell);
+
+  tableBody.appendChild(newRow);
+}
+
+function deleteRow(row) {
+  const tableBody = document.querySelector("#spreadsheet tbody");
+  tableBody.removeChild(row);
+}
+
+/*function updateSerialNumbers() {
+  const tableBody = document.querySelector("#spreadsheet tbody");
+  const rows = tableBody.querySelectorAll("tr");
+  rows.forEach((row, index) => {
+    const serialNumberCell = row.querySelector("td:first-child");
+    serialNumberCell.textContent = index + 1;
+  });
+}*/
+</script>
+
+</body>
+</html>
