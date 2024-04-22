@@ -1,567 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="styles.css">
-<title>Box Time Tracker</title>
-<style>
-.container {
-  margin-top: 20px;
-}
-
-.box {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.box label {
-  font-weight: bold;
-}
-
-.box .time-entry {
-  margin-top: 20px;
-}
-
-.time-column {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 20px;
-}
-
-.time-column h3 {
-  margin-top: 0;
-}
-
-.time-row {
-  margin-bottom: 10px;
-}
-
-.time-input {
-  width: 150px; /* Adjust width to accommodate seconds */
-}
-
-.submit-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.reset-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
-
-
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.box-row {
-  flex: 1; /* Allow the row to grow to fill the available space */
-  display: flex;
-}
-
-.box-container, .media-player {
-  flex: 1; /* Make both containers take up equal space */
-}
-
-
-
-.media-player {
-  display: flex;
-  flex-direction: column;
-}
-
-.video-container {
-  flex: 1; /* Allow the video to take up all available space */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.media-controls {
-  margin-top: 10px;
-  text-align: center;
-}
-
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    /* Your existing CSS */
+    /* Remove default padding for container */
+    .container {
+      padding: 0;
+    }
+    /* Set max width for the table */
+    .table-container {
+      display: none;
+    }
+    /* Reduce textarea height */
+    textarea {
+      height: auto;
+      max-height: 80px; /* adjust as needed */
+    }
+    /* Reduce table cell padding */
+    table td,
+    table th {
+      padding: 0.2rem; /* decrease padding */
+    }
+    /* Add space between icon and text */
+    .btn i {
+      margin-right: 3px; /* decrease margin */
+    }
+    /* Decrease button padding */
+    .btn {
+      padding: 0.2rem 0.5rem;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="box" id="kimitsu">
-    <input type="checkbox" id="kimitsu-checkbox" class="box-checkbox" onclick="toggleBox('kimitsu')">
-    <label for="kimitsu-checkbox">Show Kimitsu</label>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Entry</h3>
-        <div class="time-row">
-          <label for="kimitsu-entry-in">In:</label>
-          <input type="time" id="kimitsu-entry-out" class="time-input"  name="appt-time" step="2" >
-          <button class="submit-button" onclick="submitTime('kimitsu-entry-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-entry-in')">Reset</button>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- Nagata Store -->
+        <h2>Nagata Store</h2>
+        <input type="checkbox" id="toggleNagataTable"> Show Table
+        <div id="nagataTableContainer" class="table-container table-responsive">
+          <table id="nagataTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="nagataTableBody">
+              <tr>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addNagataCarBtn" class="btn btn-primary mb-3">Add Car</button>
         </div>
-        <div class="time-row">
-          <label for="kimitsu-entry-out">Out:</label>
-          <input type="time" id="kimitsu-entry-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-entry-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-entry-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Order</h3>
-        <div class="time-row">
-          <label for="kimitsu-order-in">In:</label>
-          <input type="time" id="kimitsu-order-in" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-order-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-order-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="kimitsu-order-out">Out:</label>
-          <input type="time" id="kimitsu-order-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-order-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-order-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Pickup</h3>
-        <div class="time-row">
-          <label for="kimitsu-pickup-in">In:</label>
-          <input type="time" id="kimitsu-pickup-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-pickup-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-pickup-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="kimitsu-pickup-out">Out:</label>
-          <input type="time" id="kimitsu-pickup-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-pickup-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-pickup-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Exit</h3>
-        <div class="time-row">
-          <label for="kimitsu-exit-in">In:</label>
-          <input type="time" id="kimitsu-exit-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-exit-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-exit-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="kimitsu-exit-out">Out:</label>
-          <input type="time" id="kimitsu-exit-out" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('kimitsu-exit-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('kimitsu-exit-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-
-  <div class="box" id="Nagata">
-    <input type="checkbox" id="Nagata-checkbox" class="box-checkbox" onclick="toggleBox('Nagata')">
-    <label for="Nagata-checkbox">Show Nagata</label>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Entry</h3>
-        <div class="time-row">
-          <label for="Nagata-entry-in">In:</label>
-          <input type="time" id="Nagata-entry-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-entry-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-entry-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Nagata-entry-out">Out:</label>
-          <input type="time" id="Nagata-entry-out" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-entry-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-entry-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Order</h3>
-        <div class="time-row">
-          <label for="Nagata-order-in">In:</label>
-          <input type="time" id="Nagata-order-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-order-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-order-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Nagata-order-out">Out:</label>
-          <input type="time" id="Nagata-order-out" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-order-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-order-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Pickup</h3>
-        <div class="time-row">
-          <label for="Nagata-pickup-in">In:</label>
-          <input type="time" id="Nagata-pickup-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-pickup-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-pickup-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Nagata-pickup-out">Out:</label>
-          <input type="time" id="Nagata-pickup-out" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-pickup-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-pickup-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Exit</h3>
-        <div class="time-row">
-          <label for="Nagata-exit-in">In:</label>
-          <input type="time" id="Nagata-exit-in" class="time-input"  name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-exit-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-exit-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Nagata-exit-out">Out:</label>
-          <input type="time" id="Nagata-exit-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Nagata-exit-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Nagata-exit-out')">Reset</button>
+        <!-- Kabe Store -->
+        <h2>Kabe Store</h2>
+        <input type="checkbox" id="toggleKabeTable"> Show Table
+        <div id="kabeTableContainer" class="table-container table-responsive">
+          <table id="kabeTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="kabeTableBody">
+              <tr>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addKabeCarBtn" class="btn btn-primary mb-3">Add Car</button>
         </div>
       </div>
     </div>
   </div>
 
+  <script>
+  $(document).ready(function(){
+    // Toggle Nagata table visibility on checkbox change
+    $('#toggleNagataTable').change(function() {
+      $('#nagataTableContainer').toggle(this.checked);
+    });
 
-  <div class="box" id="onu">
-    <input type="checkbox" id="onu-checkbox" class="box-checkbox" onclick="toggleBox('onu')">
-    <label for="onu-checkbox">Show onu</label>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Entry</h3>
-        <div class="time-row">
-          <label for="onu-entry-in">In:</label>
-          <input type="time" id="onu-entry-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-entry-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-entry-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="onu-entry-out">Out:</label>
-          <input type="time" id="onu-entry-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-entry-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-entry-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Order</h3>
-        <div class="time-row">
-          <label for="onu-order-in">In:</label>
-          <input type="time" id="onu-order-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-order-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-order-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="onu-order-out">Out:</label>
-          <input type="time" id="onu-order-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-order-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-order-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Pickup</h3>
-        <div class="time-row">
-          <label for="onu-pickup-in">In:</label>
-          <input type="time" id="onu-pickup-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-pickup-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-pickup-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="onu-pickup-out">Out:</label>
-          <input type="time" id="onu-pickup-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-pickup-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-pickup-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Exit</h3>
-        <div class="time-row">
-          <label for="onu-exit-in">In:</label>
-          <input type="time" id="onu-exit-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-exit-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-exit-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="onu-exit-out">Out:</label>
-          <input type="time" id="onu-exit-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('onu-exit-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('onu-exit-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    // Toggle Kabe table visibility on checkbox change
+    $('#toggleKabeTable').change(function() {
+      $('#kabeTableContainer').toggle(this.checked);
+    });
 
+    // Add car button functionality for Nagata Store
+    $('#addNagataCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#nagataTableBody').append(newRow);
+    });
 
-  <div class="box" id="Saga">
-    <input type="checkbox" id="Saga-checkbox" class="box-checkbox" onclick="toggleBox('Saga')">
-    <label for="Saga-checkbox">Show Saga</label>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Entry</h3>
-        <div class="time-row">
-          <label for="Saga-entry-in">In:</label>
-          <input type="time" id="Saga-entry-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-entry-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-entry-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Saga-entry-out">Out:</label>
-          <input type="time" id="Saga-entry-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-entry-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-entry-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Order</h3>
-        <div class="time-row">
-          <label for="Saga-order-in">In:</label>
-          <input type="time" id="Saga-order-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-order-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-order-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Saga-order-out">Out:</label>
-          <input type="time" id="Saga-order-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-order-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-order-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Pickup</h3>
-        <div class="time-row">
-          <label for="Saga-pickup-in">In:</label>
-          <input type="time" id="Saga-pickup-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-pickup-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-pickup-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Saga-pickup-out">Out:</label>
-          <input type="time" id="Saga-pickup-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-pickup-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-pickup-out')">Reset</button>
-        </div>Saga
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Exit</h3>
-        <div class="time-row">
-          <label for="Saga-exit-in">In:</label>
-          <input type="time" id="Saga-exit-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-exit-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-exit-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Saga-exit-out">Out:</label>
-          <input type="time" id="Saga-exit-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Saga-exit-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Saga-exit-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    // Add car button functionality for Kabe Store
+    $('#addKabeCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#kabeTableBody').append(newRow);
+    });
 
+    // Delete row functionality for Nagata Store
+    $(document).on('click', '#nagataTable .delete-row', function(){
+      $(this).closest('tr').remove();
+    });
 
-  <div class="box" id="Kabe">
-    <input type="checkbox" id="Kabe-checkbox" class="box-checkbox" onclick="toggleBox('Kabe')">
-    <label for="Kabe-checkbox">Show Kabe</label>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Entry</h3>
-        <div class="time-row">
-          <label for="Kabe-entry-in">In:</label>
-          <input type="time" id="Kabe-entry-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-entry-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-entry-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Kabe-entry-out">Out:</label>
-          <input type="time" id="Kabe-entry-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-entry-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-entry-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Order</h3>
-        <div class="time-row">
-          <label for="Kabe-order-in">In:</label>
-          <input type="time" id="Kabe-order-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-order-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-order-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Kabe-order-out">Out:</label>
-          <input type="time" id="Kabe-order-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-order-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-order-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Pickup</h3>
-        <div class="time-row">
-          <label for="Kabe-pickup-in">In:</label>
-          <input type="time" id="Kabe-pickup-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-pickup-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-pickup-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Kabe-pickup-out">Out:</label>
-          <input type="time" id="Kabe-pickup-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-pickup-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-pickup-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-    <div class="time-entry hidden">
-      <div class="time-column">
-        <h3>Exit</h3>
-        <div class="time-row">
-          <label for="Kabe-exit-in">In:</label>
-          <input type="time" id="Kabe-exit-in" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-exit-in')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-exit-in')">Reset</button>
-        </div>
-        <div class="time-row">
-          <label for="Kabe-exit-out">Out:</label>
-          <input type="time" id="Kabe-exit-out" class="time-input"   name="appt-time" step="2">
-          <button class="submit-button" onclick="submitTime('Kabe-exit-out')">Submit</button>
-          <button class="reset-button" onclick="resetTime('Kabe-exit-out')">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    // Mark button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.timepicker').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
 
+    // Edit button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<input type="time" class="form-control timepicker" step="1" value="' + text + '">');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
 
+    // Delete row functionality for Kabe Store
+    $(document).on('click', '#kabeTable .delete-row', function(){
+      $(this).closest('tr').remove();
+    });
 
-  <!-- Repeat the same structure for other boxes -->
+    // Mark button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.timepicker').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
 
-</div>
+    // Edit button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<input type="time" class="form-control timepicker" step="1" value="' + text + '">');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Media Player Section >
-<div class="media-player">
-    <video id="video-player" controls>
-      <source src="" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <div class="media-controls">
-      <button onclick="playPause()">Play/Pause</button>
-      <button onclick="skipBackward()">Skip Backward</button>
-      <button onclick="skipForward()">Skip Forward</button>
-      <button onclick="changeSpeed(-1)">Slow Down</button>
-      <button onclick="changeSpeed(1)">Speed Up</button>
-    </div>
-  </div>
-</div-->
-
-<script>
-const video = document.getElementById('video-player');
-
-function playPause() {
-  if (video.paused) {
-    video.play();
-  } else {
-    video.pause();
-  }
-}
-
-function skipBackward() {
-  video.currentTime -= 5; // Skip backward by 5 seconds
-}
-
-function skipForward() {
-  video.currentTime += 5; // Skip forward by 5 seconds
-}
-
-function changeSpeed(speedChange) {
-  // Increase or decrease playback speed by 0.25
-  const currentSpeed = video.playbackRate;
-  video.playbackRate = currentSpeed + (0.25 * speedChange);
-}
-
-
-
-
-function enforceFormat(inputId) {
-  const input = document.getElementById(inputId);
-  input.addEventListener('blur', function(event) {
-    let value = event.target.value;
-    // Add seconds if not provided
-    if (!value.includes(':')) {
-      value += ':00';
-    }
-    event.target.value = value;
   });
-}
 
-// Call enforceFormat for each time input
-document.querySelectorAll('.time-input').forEach(function(input) {
-  enforceFormat(input.id);
-});
+      
 
-// Your existing JavaScript functions here
-function toggleBox(boxId) {
-  const checkbox = document.getElementById(boxId + "-checkbox");
-  const content = document.getElementById(boxId).querySelectorAll(".time-entry");
-  content.forEach(entry => {
-    entry.classList.toggle("hidden", !checkbox.checked);
-  });
-}
-
-function submitTime(inputId) {
-  const inputElement = document.getElementById(inputId);
-  // Placeholder logic for submitting time
-  console.log("Time submitted:", inputElement.value);
-}
-
-function resetTime(inputId) {
-  const inputElement = document.getElementById(inputId);
-  inputElement.value = "";
-}
-</script>
+      
+     
+   
+  </script>
 </body>
 </html>
