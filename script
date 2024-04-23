@@ -1,0 +1,185 @@
+<script>
+ const videoPlayer = document.getElementById('videoPlayer');
+    const playPauseButton = document.getElementById('playPauseButton');
+    const forwardSpeedButton = document.getElementById('forwardSpeedButton');
+
+    let playbackRate = 1; // Initial playback rate
+
+    // Event listener for keyboard events
+document.addEventListener('keydown', (event) => {
+    if (event.key === '+') {
+        event.preventDefault(); // Prevent the default behavior of the '+' key
+        if (playbackRate === 1) {
+            playbackRate = 12;
+        } else if (playbackRate === 12) {
+            playbackRate = 24;
+        }else if (playbackRate === 24) {
+            playbackRate = 32;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    } else if (event.key === '-') {
+        event.preventDefault(); // Prevent the default behavior of the '-' key
+        playbackRate = 1; // Return speed to normal
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    } else if (event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault(); // Prevent space bar from scrolling the page
+        togglePlayPause();
+    } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        skipForward();
+    } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        skipBackward();
+    }
+});
+
+    // Function to toggle play/pause
+    function togglePlayPause() {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+            playPauseButton.textContent = 'Pause';
+        } else {
+            videoPlayer.pause();
+            playPauseButton.textContent = 'Play';
+        }
+    }
+
+    // Function to skip forward by 5 seconds
+    function skipForward() {
+        videoPlayer.currentTime += 5;
+    }
+
+    // Function to skip backward by 5 seconds
+    function skipBackward() {
+        videoPlayer.currentTime -= 5;
+    }
+
+    // Function to increase playback speed
+    function increaseSpeed() {
+        playbackRate += 1;
+        if (playbackRate > 9) {
+            playbackRate = 1;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    }
+
+    // Function to decrease playback speed
+    function decreaseSpeed() {
+        playbackRate -= 1;
+        if (playbackRate < 1) {
+            playbackRate = 5;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    }
+
+    // Function to rewind the video by 5 seconds
+    function rewind() {
+        videoPlayer.currentTime -= 5;
+    }
+
+    // Function to update the speed button label
+    function updateSpeedButtonLabel() {
+        forwardSpeedButton.textContent = `Forward Speed (+${playbackRate}x)`;
+    }
+
+    // Function to handle file input change
+    function handleFileInputChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const objectURL = URL.createObjectURL(file);
+            videoPlayer.src = objectURL;
+            videoPlayer.currentTime = 0; // Reset the video to the beginning
+            videoPlayer.play();
+            playPauseButton.textContent = 'Pause';
+            playbackRate = 1; // Reset playback speed to normal
+            updateSpeedButtonLabel();
+            videoPlayer.playbackRate = playbackRate;
+        }
+    }
+
+    // Function to open file input when button is clicked
+    function openFileInput() {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+    }
+
+    // Trigger the file input when the video is clicked
+    videoPlayer.addEventListener('click', () => {
+        openFileInput();
+    });
+
+    // Initial update of speed button label
+    updateSpeedButtonLabel();
+
+    // Event listener for forward speed button
+    forwardSpeedButton.addEventListener('click', increaseSpeed);
+
+    // Your other functions for managing counters and sections go here
+
+    function toggleSection(sectionId, show) {
+            const section = document.querySelector(`.${sectionId}`);
+            section.style.display = show ? 'block' : 'none';
+        }
+
+        function updateCounterDisplay(counterId, value) {
+            document.getElementById(counterId).value = value;
+        }
+
+        function addCounter(counterId) {
+            const currentCounterValue = parseInt(document.getElementById(`counter${counterId}`).value);
+            updateCounterDisplay(`counter${counterId}`, currentCounterValue + 1);
+        }
+
+        function subtractCounter(counterId) {
+            const currentCounterValue = parseInt(document.getElementById(`counter${counterId}`).value);
+            if (currentCounterValue > 0) {
+                updateCounterDisplay(`counter${counterId}`, currentCounterValue - 1);
+            }
+        }
+
+        function resetCounters(counterId1, counterId2) {
+            updateCounterDisplay(`counter${counterId1}`, 0);
+            updateCounterDisplay(`counter${counterId2}`, 0);
+        }
+
+
+       /* Function to handle keyboard events for speed adjustment
+document.addEventListener('keydown', (event) => {
+    if (event.key === '+') {
+        event.preventDefault(); // Prevent the default behavior of the '+' key
+        if (playbackRate === 1) {
+            playbackRate = 12;
+        } else if (playbackRate === 12) {
+            playbackRate = 24;
+        }else if (playbackRate === 24) {
+            playbackRate = 32;
+        }
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    } else if (event.key === '-') {
+        event.preventDefault(); // Prevent the default behavior of the '-' key
+        playbackRate = 1; // Return speed to normal
+        updateSpeedButtonLabel();
+        videoPlayer.playbackRate = playbackRate;
+    }
+});*/
+
+
+// Function to open file input when button is clicked
+function openFileInput() {
+    const fileInput = document.getElementById('fileInput');
+    if (!event.target.closest('.media-player')) {
+        fileInput.click();
+    }
+}
+
+    
+
+    // Modify toggleSections function to toggle visibility of sections and adjust media player width
+
+
+</script>
