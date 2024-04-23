@@ -1,306 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Box Time Tracker</title>
-<style>
-.container {
-  margin-top: 20px;
-}
-
-.box {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.box label {
-  font-weight: bold;
-}
-
-.box .time-entry {
-  margin-top: 20px;
-}
-
-.time-row {
-  display: flex;
-}
-
-.time-column {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.time-subrow {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.time-subrow label {
-  margin-right: 5px;
-}
-
-.time-input {
-  width: 150px; /* Adjust width to accommodate seconds */
-}
-
-.submit-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.reset-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.add-button {
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  margin-right: 5px;
-  float: right;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-.hidden {
-  display: none;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table, th, td {
-  border: 1px solid black;
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    /* Your existing CSS */
+    /* Remove default padding for container */
+    .container {
+      padding: 0;
+    }
+    /* Set max width for the table */
+    .table-container {
+      display: none;
+    }
+    /* Reduce textarea height */
+    textarea {
+      height: auto;
+      max-height: 80px; /* adjust as needed */
+    }
+    /* Reduce table cell padding */
+    table td,
+    table th {
+      padding: 0.2rem; /* decrease padding */
+    }
+    /* Add space between icon and text */
+    .btn i {
+      margin-right: 3px; /* decrease margin */
+    }
+    /* Decrease button padding */
+    .btn {
+      padding: 0.2rem 0.5rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="box" id="kimitsu">
-      <input type="checkbox" id="kimitsu-checkbox" class="box-checkbox" onclick="toggleBox('kimitsu')">
-      <label for="kimitsu-checkbox">Show Kimitsu</label>
-      <div class="time-entry hidden">
-        <div class="time-row">
-          <div class="time-column">
-            <h3>Entry</h3>
-            <div class="time-subrow">
-              <label for="kimitsu-entry-in">In:</label>
-              <input type="time" id="kimitsu-entry-in" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'entry', 'in')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-entry-in')">Reset</button>
-            </div>
-            <div class="time-subrow">
-              <label for="kimitsu-entry-out">Out:</label>
-              <input type="time" id="kimitsu-entry-out" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'entry', 'out')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-entry-out')">Reset</button>
-            </div>
-          </div>
-          <div class="time-column">
-            <h3>Order</h3>
-            <div class="time-subrow">
-              <label for="kimitsu-order-in">In:</label>
-              <input type="time" id="kimitsu-order-in" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'order', 'in')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-order-in')">Reset</button>
-            </div>
-            <div class="time-subrow">
-              <label for="kimitsu-order-out">Out:</label>
-              <input type="time" id="kimitsu-order-out" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'order', 'out')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-order-out')">Reset</button>
-            </div>
-          </div>
-          <div class="time-column">
-            <h3>Pickup</h3>
-            <div class="time-subrow">
-              <label for="kimitsu-pickup-in">In:</label>
-              <input type="time" id="kimitsu-pickup-in" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'pickup', 'in')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-pickup-in')">Reset</button>
-            </div>
-            <div class="time-subrow">
-              <label for="kimitsu-pickup-out">Out:</label>
-              <input type="time" id="kimitsu-pickup-out" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'pickup', 'out')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-pickup-out')">Reset</button>
-            </div>
-          </div>
-          <div class="time-column">
-            <h3>Exit</h3>
-            <div class="time-subrow">
-              <label for="kimitsu-exit-in">In:</label>
-              <input type="time" id="kimitsu-exit-in" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'exit', 'in')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-exit-in')">Reset</button>
-            </div>
-            <div class="time-subrow">
-              <label for="kimitsu-exit-out">Out:</label>
-              <input type="time" id="kimitsu-exit-out" class="time-input" name="appt-time" step="2">
-              <button class="submit-button" onclick="submitTime('kimitsu', 'exit', 'out')">Submit</button>
-              <button class="reset-button" onclick="resetTime('kimitsu-exit-out')">Reset</button>
-            </div>
-          </div>
-          <div class="time-column">
-            <h3>Remarks</h3>
-            <div class="time-subrow">
-              <input type="text" id="kimitsu-remarks" class="time-input" placeholder="Enter remarks">
-            </div>
-          </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- Nagata Store -->
+        <h2>Nagata Store</h2>
+        <input type="checkbox" id="toggleNagataTable"> Show Table
+        <div id="nagataTableContainer" class="table-container table-responsive">
+          <table id="nagataTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="nagataTableBody">
+              <tr>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addNagataCarBtn" class="btn btn-primary mb-3">Add Car</button>
+          <button id="exportNagataData" class="btn btn-primary mb-3">Export Nagata Data</button>
         </div>
-        <div class="time-row">
-          <div class="time-column">
-            <button class="add-button" onclick="addRow()">Add Row</button>
-          </div>
+
+        <!-- Kabe Store -->
+        <h2>Kabe Store</h2>
+        <input type="checkbox" id="toggleKabeTable"> Show Table
+        <div id="kabeTableContainer" class="table-container table-responsive">
+          <table id="kabeTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="kabeTableBody">
+              <tr>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td><input type="time" class="form-control timepicker" step="1"></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addKabeCarBtn" class="btn btn-primary mb-3">Add Car</button>
+          <button id="exportKabeData" class="btn btn-primary mb-3">Export Kabe Data</button>
         </div>
-        <table id="spreadsheet">
-          <thead>
-            <tr>
-              <!--th>Serial No.</th-->
-              <th>Entry In</th>
-              <th>Entry Out</th>
-              <th>Order In</th>
-              <th>Order Out</th>
-              <th>Pickup In</th>
-              <th>Pickup Out</th>
-              <th>Exit In</th>
-              <th>Exit Out</th>
-              <th>Remarks</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Spreadsheet rows will be dynamically added here -->
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
 
-<script>
-function toggleBox(boxId) {
-  const checkbox = document.getElementById(boxId + "-checkbox");
-  const content = document.getElementById(boxId).querySelectorAll(".time-entry");
-  content.forEach(entry => {
-    entry.classList.toggle("hidden", !checkbox.checked);
-  });
-}
-function submitTime(inputId) {
-  const inputElement = document.getElementById(inputId);
-  const tableBody = document.querySelector("#spreadsheet tbody");
-  const newRow = document.createElement("tr");
+  <script>
+  // Function to convert table data to CSV format
+  function tableToCSV($table) {
+    var headers = [];
+    var rows = [];
 
-  // Serial Number Cell
-  /*const serialNumberCell = document.createElement("td");
-  serialNumberCell.textContent = tableBody.rows.length + 1; // Incrementing the row count for serial number
-  newRow.appendChild(serialNumberCell);*/
+    // Get table headers
+    $table.find('thead th').each(function() {
+      headers.push($(this).text().trim());
+    });
 
-  const timeInputs = ['entry', 'order', 'pickup', 'exit'];
+    // Get table rows
+    $table.find('tbody tr').each(function() {
+      var rowData = [];
+      $(this).find('td:not(:last-child)').each(function() { // Exclude last column
+        rowData.push($(this).text().trim());
+      });
+      rows.push(rowData.join(','));
+    });
 
-  for (const timeType of timeInputs) {
-    const inTime = document.getElementById(`kimitsu-${timeType}-in`).value;
-    const outTime = document.getElementById(`kimitsu-${timeType}-out`).value;
-
-    const inCell = document.createElement("td");
-    inCell.textContent = inTime;
-
-    const outCell = document.createElement("td");
-    outCell.textContent = outTime;
-
-    newRow.appendChild(inCell);
-    newRow.appendChild(outCell);
+    // Combine headers and rows
+    var csvContent = headers.join(',') + '\n' + rows.join('\n');
+    return csvContent;
   }
 
-  // Remarks Cell
-  const remarks = document.getElementById(`kimitsu-remarks`).value;
-  const remarksCell = document.createElement("td");
-  remarksCell.textContent = remarks;
-  newRow.appendChild(remarksCell);
-
-  // Action Cell
-  const actionCell = document.createElement("td");
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.onclick = function() {
-    deleteRow(newRow);
-    updateSerialNumbers();
-  };
-  actionCell.appendChild(deleteButton);
-  newRow.appendChild(actionCell);
-
-  tableBody.appendChild(newRow);
-}
-
-
-
-function resetTime(inputId) {
-  const inputElement = document.getElementById(inputId);
-  inputElement.value = "";
-}
-
-function addRow() {
-  const tableBody = document.querySelector("#spreadsheet tbody");
-  const newRow = document.createElement("tr");
-
-  // Serial Number Cell
-  //const serialNumberCell = document.createElement("td");
-  //serialNumberCell.textContent = tableBody.rows.length + 1; // Incrementing the row count for serial number
- // newRow.appendChild(serialNumberCell);
-
-  // Empty cells for time inputs
-  for (let i = 0; i < 8; i++) {
-    const emptyCell = document.createElement("td");
-    newRow.appendChild(emptyCell);
+  // Function to trigger download of CSV file
+  function downloadCSV(csvContent, filename) {
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    if (link.download !== undefined) {
+      var url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   }
 
-  // Empty cell for remarks
-  const remarksCell = document.createElement("td");
-  newRow.appendChild(remarksCell);
+  $(document).ready(function(){
+    // Toggle Nagata table visibility on checkbox change
+    $('#toggleNagataTable').change(function() {
+      $('#nagataTableContainer').toggle(this.checked);
+    });
 
-  // Action Cell
-  const actionCell = document.createElement("td");
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.onclick = function() {
-    deleteRow(newRow);
-    updateSerialNumbers();
-  };
-  actionCell.appendChild(deleteButton);
-  newRow.appendChild(actionCell);
+    // Toggle Kabe table visibility on checkbox change
+    $('#toggleKabeTable').change(function() {
+      $('#kabeTableContainer').toggle(this.checked);
+    });
 
-  tableBody.appendChild(newRow);
-}
+    // Add car button functionality for Nagata Store
+    $('#addNagataCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#nagataTableBody').append(newRow);
+    });
 
-function deleteRow(row) {
-  const tableBody = document.querySelector("#spreadsheet tbody");
-  tableBody.removeChild(row);
-}
+    // Add car button functionality for Kabe Store
+    $('#addKabeCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td><input type="time" class="form-control timepicker" step="1"></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#kabeTableBody').append(newRow);
+    });
 
-/*function updateSerialNumbers() {
-  const tableBody = document.querySelector("#spreadsheet tbody");
-  const rows = tableBody.querySelectorAll("tr");
-  rows.forEach((row, index) => {
-    const serialNumberCell = row.querySelector("td:first-child");
-    serialNumberCell.textContent = index + 1;
+    // Delete row functionality for Nagata Store
+    $(document).on('click', '#nagataTable .delete-row', function(){
+      $(this).closest('tr').remove();
+    });
+
+    // Mark button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.timepicker').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
+
+    // Edit button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<input type="time" class="form-control timepicker" step="1" value="' + text + '">');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
+
+    // Delete row functionality for Kabe Store
+    $(document).on('click', '#kabeTable .delete-row', function(){
+      $(this).closest('tr').remove();
+    });
+
+    // Mark button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.timepicker').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
+
+    // Edit button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<input type="time" class="form-control timepicker" step="1" value="' + text + '">');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
+
+    // Export Nagata Data
+    $('#exportNagataData').click(function(){
+      var csvContent = tableToCSV($('#nagataTable'));
+      downloadCSV(csvContent, 'nagata_data.csv');
+    });
+
+    // Export Kabe Data
+    $('#exportKabeData').click(function(){
+      var csvContent = tableToCSV($('#kabeTable'));
+      downloadCSV(csvContent, 'kabe_data.csv');
+    });
+
   });
-}*/
-</script>
 
+  </script>
 </body>
 </html>
