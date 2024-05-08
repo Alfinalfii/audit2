@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer Table</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    .time-input {
+      width: 100px;
+    }
+    .btn-group button {
+      margin-right: 5px; /* Adjust margin as needed */
+    }
+
+    .table-bordered {
+      border: 1px solid #dee2e6;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+      border: 1px solid #dee2e6;
+    }
+
+    .entryCell,
+    .exitCell {
+      background-color: #cce5ff; /* Light blue */
+    }
+
+    .orderInCell,
+    .orderOutCell {
+      background-color: #d4edda; /* Light green */
+    }
+
+    .pickupInCell,
+    .pickupOutCell {
+      background-color: #fff3cd; /* Light yellow */
+    }
+
+    .exitInCell,
+    .exitOutCell {
+      background-color: #f8d7da; /* Light red */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="timerDisplay">Timer:</label>
+        <div class="dropdown">
+            <select id="hoursDropdown">
+                <option value="0">Select Hours</option>
+                <!-- Generating options from 1 to 24 -->
+                <!-- You can use JavaScript to generate this HTML dynamically -->
+                <!-- Here, for simplicity, I'll manually add the options -->
+                <script>
+                    for (let i = 0; i <= 23; i++) {
+                        document.write(`<option value="${i}">${i}</option>`);
+                    }
+                </script>
+            </select>
+        <div id="timerDisplay">00:00:00</div>
+      </div>
+      <div class="form-group">
+        <label for="speedDisplay">Speed:</label>
+        <div id="speedDisplay">1x</div>
+      </div>
+      <div class="form-group">
+        <button id="startButton" class="btn btn-primary">Start / Pause</button>
+        <button id="stopButton" class="btn btn-secondary">Stop</button>
+        <button id="increaseSpeed" class="btn btn-success">Speed +</button>
+        <button id="decreaseSpeed" class="btn btn-warning">Speed -</button>
+      </div>
+      <div class="form-group">
+        <label for="jumpInput">Jump to (minutes):</label>
+        <input type="number" id="jumpInput" class="form-control" min="0" step="1" value="0">
+        <button id="jumpButton" class="btn btn-info mt-2">Jump</button>
+      </div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Remarks</th>
+            <th>Entry In</th>
+            <th>Entry Out</th>
+            <th>Order In</th>
+            <th>Order Out</th>
+            <th>Pickup In</th>
+            <th>Pickup Out</th>
+            <th>Exit In</th>
+            <th>Exit Out</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="timerTableBody">
+          <!-- Table rows will be added dynamically here -->
+        </tbody>
+      </table>
+      <button id="addCarBtn" class="btn btn-primary">Add Car</button>
+      <button id="exportData" class="btn btn-primary">Export Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // JavaScript code for the timer goes here
+  const timerDisplay = document.getElementById('timerDisplay');
+  const speedDisplay = document.getElementById('speedDisplay');
+  const startButton = document.getElementById('startButton');
+  const stopButton = document.getElementById('stopButton');
+  const increaseSpeedButton = document.getElementById('increaseSpeed');
+  const decreaseSpeedButton = document.getElementById('decreaseSpeed');
+  const jumpInput = document.getElementById('jumpInput');
+  const jumpButton = document.getElementById('jumpButton');
+  let timerInterval;
+  let timerSpeedIndex = 0; // Index to track current speed
+  const timerSpeeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  let seconds = 0;
+  let minutes = 0;
+  let hours = 0;
+  let timerRunning = false;
+
+  // Function to update the timer display
+  function updateTimerDisplay() {
+      const formattedTime = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+      timerDisplay.textContent = formattedTime;
+      speedDisplay.textContent = timerSpeeds[timerSpeedIndex] + 'x'; // Update speed display
+  }
+
+  // Function to start the timer
+  function startTimer() {
+      if (!timerInterval) {
+          let intervalTime = 1000 / timerSpeeds[timerSpeedIndex]; // Calculate interval time based on speed
+          timerInterval = setInterval(() => {
+              seconds++;
+              if (seconds === 60) {
+                  seconds = 0;
+                  minutes++;
+                  if (minutes === 60) {
+                      minutes = 0;
+                      hours++;
+                  }
+              }
+              updateTimerDisplay();
+          }, intervalTime);
+      }
+      timerRunning = true;
+  }
+
+  // Function to stop the timer
+  function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerRunning = false;
+  }
+
+  // Helper function to pad numbers with leading zeros
+  function pad(num) {
+      return num < 10 ? '0' + num : num;
+  }
+
+  // Event listener for dropdown change
+  hoursDropdown.addEventListener('change', () => {
+            hours = parseInt(hoursDropdown.value);
+            updateTimerDisplay();
+        });
+
+  // Event listener for start button click
+  startButton.addEventListener('click', () => {
+      if (!timerRunning) {
+          startTimer();
+      } else {
+          stopTimer();
+      }
+  });
+
+  // Event listener for stop button click
+  stopButton.addEventListener('click', () => {
+      stopTimer();
+  });
+
+  // Event listener for increase speed button click
+  increaseSpeedButton.addEventListener('click', () => {
+      timerSpeedIndex = (timerSpeedIndex + 1) % timerSpeeds.length; // Increment index and wrap around
+      updateTimerDisplay(); // Update timer display immediately
+      // If timer is running, adjust interval time
+      if (timerInterval) {
+          clearInterval(timerInterval);
+          startTimer();
+      }
+  });
+
+  // Event listener for decrease speed button click
+  decreaseSpeedButton.addEventListener('click', () => {
+      timerSpeedIndex = (timerSpeedIndex - 1 + timerSpeeds.length) % timerSpeeds.length; // Decrement index and wrap around
+      updateTimerDisplay(); // Update timer display immediately
+      // If timer is running, adjust interval time
+      if (timerInterval) {
+          clearInterval(timerInterval);
+          startTimer();
+      }
+  });
+
+  // Event listener for jump button click
+  jumpButton.addEventListener('click', () => {
+      const jumpMinutes = parseInt(jumpInput.value);
+      if (!isNaN(jumpMinutes)) {
+          minutes = jumpMinutes % 60;
+          hours = Math.floor(jumpMinutes / 60); // Update hours
+          updateTimerDisplay();
+      }
+  });
+
+  // Function to add a new car row to the table
+  function addCarRow() {
+      const tableBody = document.getElementById('timerTableBody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+          <td contenteditable="true"></td>
+          <td class="entryCell"></td>
+          <td class="exitCell"></td>
+          <td class="orderInCell"></td>
+          <td class="orderOutCell"></td>
+          <td class="pickupInCell"></td>
+          <td class="pickupOutCell"></td>
+          <td class="exitInCell"></td>
+          <td class="exitOutCell"></td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-success btn-sm saveBtn"><i class="fas fa-save"></i></button>
+              <button class="btn btn-primary btn-sm editBtn"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm deleteBtn"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>    
+      `;
+      
+      // Add event listeners to the buttons in the newly created row
+      const saveBtn = newRow.querySelector('.saveBtn');
+      const editBtn = newRow.querySelector('.editBtn');
+      const deleteBtn = newRow.querySelector('.deleteBtn');
+
+      saveBtn.addEventListener('click', () => saveChanges(newRow));
+      editBtn.addEventListener('click', () => editRow(newRow));
+      deleteBtn.addEventListener('click', () => deleteRow(newRow));
+
+      tableBody.appendChild(newRow);
+  }
+
+  // Event listener for add car button click
+  document.getElementById('addCarBtn').addEventListener('click', addCarRow);
+
+  // Function to delete a car row from the table
+  function deleteCarRow(btn) {
+      const row = btn.closest('tr');
+      row.parentNode.removeChild(row);
+  }
+
+  // Event delegation for delete button clicks
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('deleteBtn')) {
+          deleteCarRow(event.target);
+      }
+  });
+
+  // Function to export data
+  function exportData() {
+      const table = document.getElementById('timerTableBody');
+      const rows = table.getElementsByTagName('tr');
+      let data = 'Car,Entry,Exit,Order In,Order Out,Pickup In,Pickup Out,Exit In,Exit Out\n';
+
+      for (let i = 0; i < rows.length; i++) {
+          const cols = rows[i].querySelectorAll('td');
+          for (let j = 0; j < cols.length; j++) {
+              data += cols[j].textContent + ',';
+          }
+          data += '\n';
+      }
+
+      // Download the CSV file
+      const blob = new Blob([data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'car_data.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+  }
+
+  // Event listener for export data button click
+  document.getElementById('exportData').addEventListener('click', exportData);
+
+  // Event listener for entry button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('entryCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for exit button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('exitCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for order in button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('orderInCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for order out button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('orderOutCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for pickup in button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('pickupInCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for pickup out button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('pickupOutCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for exit in button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('exitInCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Event listener for exit out button click
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      if (event.target.classList.contains('exitOutCell')) {
+          event.target.textContent = timerDisplay.textContent;
+      }
+  });
+
+  // Function to edit a row
+  function editRow(row) {
+      // Set the contenteditable attribute of all cells in the row to true to enable editing
+      const cells = row.querySelectorAll('td');
+      cells.forEach(cell => {
+          cell.contentEditable = true;
+      });
+  }
+
+  // Function to delete a row
+  function deleteRow(row) {
+      row.remove();
+  }
+
+  // Function to save the changes made in a row
+  function saveChanges(row) {
+      // Get all cells in the row
+      const cells = row.querySelectorAll('td');
+
+      // Loop through each cell and update the data as needed
+      // For example, you can save the data to a database or perform any other action here
+
+      // Disable contenteditable for all cells to prevent further edits
+      cells.forEach(cell => {
+          cell.contentEditable = false;
+      });
+  }
+
+  // Event delegation for action button clicks
+  document.getElementById('timerTableBody').addEventListener('click', (event) => {
+      const target = event.target;
+      const btnGroup = target.closest('.btn-group');
+      const row = target.closest('tr');
+
+      if (btnGroup) {
+          if (target.classList.contains('saveBtn')) {
+              // Save button clicked
+              saveChanges(row);
+          } else if (target.classList.contains('editBtn')) {
+              // Edit button clicked
+              editRow(row);
+          } else if (target.classList.contains('deleteBtn')) {
+              // Delete button clicked
+              deleteRow(row);
+          }
+      }
+  });
+
+  // Event listener for spacebar press
+  document.addEventListener('keydown', (event) => {
+      if (event.code === 'Space') {
+          event.preventDefault(); // Prevent default spacebar behavior (like scrolling)
+          if (!timerRunning) {
+              startTimer();
+          } else {
+              stopTimer();
+          }
+      }
+  });
+
+</script>
+</body>
+</html>
