@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+  /* Your existing CSS */
+  /* Remove default padding for container */
+
+ 
+  .container {
+    padding: 0;
+  }
+  /* Set max width for the table */
+  .table-container {
+    display: none;
+  }
+  /* Reduce textarea height */
+  textarea {
+    height: auto;
+    max-height: 80px; /* adjust as needed */
+  }
+  /* Reduce table cell padding */
+  table td,
+  table th {
+    padding: 0.2rem; /* decrease padding */
+  }
+  /* Add space between icon and text */
+  .btn i {
+    margin-right: 3px; /* decrease margin */
+  }
+  /* Decrease button padding */
+  .btn {
+    padding: 0.2rem 0.5rem;
+  }
+  /* Sticky header for both tables */
+  .table-fixed thead {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #100f0f; /* Change the background color if needed */
+    color: burlywood;
+  }
+
+  table td {
+      font-weight: bold;
+    }
+
+
+  /* Add specific colors to different columns */
+  #nagataTable td:nth-child(3),
+    #nagataTable td:nth-child(4) {
+      background-color: orange;
+    }
+    #nagataTable td:nth-child(5),
+    #nagataTable td:nth-child(6) {
+      background-color: yellow;
+    }
+    #nagataTable td:nth-child(7),
+    #nagataTable td:nth-child(8) {
+      background-color: lightgreen;
+    }
+    #nagataTable td:nth-child(9),
+    #nagataTable td:nth-child(10) {
+      background-color: grey;
+    }
+
+
+ body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  #videoPlayer {
+  width: 100%;
+  height: 50%;
+  object-fit: fill;
+}
+
+  .video-controls {
+  margin-top: 10px;
+}
+.video-controls {
+  width: 100%;
+  
+}
+.file-input {
+  margin-left: auto;
+}
+
+.btn {
+  margin-right: 5px;
+}
+
+
+  </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            
+          
+        <!-- Nagata Store -->
+        <h2>Nagata Store</h2>
+        <input type="checkbox" id="toggleNagataTable"> Show Table
+        <div id="nagataTableContainer" class="table-container table-responsive">
+          <table id="nagataTable" class="table table-bordered table-fixed"> <!-- Add table-fixed class here -->
+            <thead>
+              <tr>
+                <th>Sl No</th>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="nagataTableBody">
+              <tr>
+                <td class="serial-number">1</td>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <!-- Replace input type="time" with textarea -->
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addNagataCarBtn" class="btn btn-primary mb-3">Add Car</button>
+          <button id="exportNagataData" class="btn btn-primary mb-3">Export Nagata Data</button>
+        </div>
+
+
+        
+        <video id="videoPlayer" controls>
+          <!-- Video source will be set dynamically -->
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-controls">
+            <button id="playPauseBtn" class="btn btn-primary"><i class="fas fa-play"></i></button>
+            <button id="increaseSpeedBtn" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+            <button id="decreaseSpeedBtn" class="btn btn-primary"><i class="fas fa-minus"></i></button>
+            <span id="speedIndicator">Speed: 1x</span>
+           
+         
+          <label for="videoFile"></label>
+          <input type="file" class="file-input" accept="video/*">
+        </div>
+
+        <!-- Kabe Store -->
+        
+        <h2>Kabe Store</h2>
+        <input type="checkbox" id="toggleKabeTable"> Show Table
+        <div id="kabeTableContainer" class="table-container table-responsive">
+          <table id="kabeTable" class="table table-bordered table-fixed"> <!-- Add table-fixed class here -->
+            <thead>
+              <tr>
+                <th>Sl No</th>
+                <th>Remarks</th>
+                <th>Entry In</th>
+                <th>Entry Out</th>
+                <th>Order In</th>
+                <th>Order Out</th>
+                <th>Pickup In</th>
+                <th>Pickup Out</th>
+                <th>Exit In</th>
+                <th>Exit Out</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="kabeTableBody">
+              <tr>
+                <td class="serial-number">1</td>
+                <td><div class="form-control" contenteditable="true"></div></td>
+                <!-- Replace input type="time" with textarea -->
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;
+                    <button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;
+                    <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addKabeCarBtn" class="btn btn-primary mb-3">Add Car</button>
+          <button id="exportKabeData" class="btn btn-primary mb-3">Export Kabe Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // Function to convert table data to CSV format
+  function tableToCSV($table) {
+    var headers = [];
+    var rows = [];
+
+    // Get table headers
+    $table.find('thead th').each(function() {
+      headers.push($(this).text().trim());
+    });
+
+    // Get table rows
+    $table.find('tbody tr').each(function() {
+      var rowData = [];
+      $(this).find('td:not(:last-child)').each(function() { // Exclude last column
+        rowData.push($(this).text().trim());
+      });
+      rows.push(rowData.join(','));
+    });
+
+    // Combine headers and rows
+    var csvContent = headers.join(',') + '\n' + rows.join('\n');
+    return csvContent;
+  }
+
+  // Function to trigger download of CSV file
+  function downloadCSV(csvContent, filename) {
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    if (link.download !== undefined) {
+      var url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
+  // Function to update serial numbers
+  function updateSerialNumbers(tableId) {
+    $('#' + tableId + ' tbody tr').each(function(index) {
+      $(this).find('.serial-number').text(index + 1);
+    });
+  }
+
+  $(document).ready(function(){
+    // Toggle Nagata table visibility on checkbox change
+    $('#toggleNagataTable').change(function() {
+      $('#nagataTableContainer').toggle(this.checked);
+    });
+
+    // Toggle Kabe table visibility on checkbox change
+    $('#toggleKabeTable').change(function() {
+      $('#kabeTableContainer').toggle(this.checked);
+    });
+
+    // Add car button functionality for Nagata Store
+    $('#addNagataCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td class="serial-number"></td>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#nagataTableBody').append(newRow);
+      // Update serial numbers after adding a new row
+      updateSerialNumbers('nagataTable');
+    });
+
+    // Add car button functionality for Kabe Store
+    $('#addKabeCarBtn').click(function(){
+      var newRow = '<tr>' +
+        '<td class="serial-number"></td>' +
+        '<td><div class="form-control" contenteditable="true"></div></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td><textarea class="form-control time-input" rows="1" maxlength="8"></textarea></td>' +
+        '<td>' +
+          '<div class="btn-group" role="group">' +
+            '<button type="button" class="btn btn-success mark-btn"><i class="fas fa-check"></i><span class="d-none d-md-inline"> Mark</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-info edit-btn"><i class="fas fa-pencil-alt"></i><span class="d-none d-md-inline"> Edit</span></button>&nbsp;'+
+            '<button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash-alt"></i><span class="d-none d-md-inline"> Delete</span></button>'+
+          '</div>' +
+        '</td>' +
+        '</tr>';
+      $('#kabeTableBody').append(newRow);
+      // Update serial numbers after adding a new row
+      updateSerialNumbers('kabeTable');
+    });
+
+    // Delete row functionality for Nagata Store
+    $(document).on('click', '#nagataTable .delete-row', function(){
+      $(this).closest('tr').remove();
+      // Update serial numbers after deleting a row
+      updateSerialNumbers('nagataTable');
+    });
+
+    // Mark button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.time-input').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
+
+    // Edit button functionality for Nagata Store
+    $(document).on('click', '#nagataTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<textarea class="form-control time-input" rows="1" maxlength="8">' + text + '</textarea>');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
+
+    // Delete row functionality for Kabe Store
+    $(document).on('click', '#kabeTable .delete-row', function(){
+      $(this).closest('tr').remove();
+      // Update serial numbers after deleting a row
+      updateSerialNumbers('kabeTable');
+    });
+
+    // Mark button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .mark-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('.time-input').each(function(){
+        $(this).replaceWith($(this).val());
+      });
+      $row.find('div[contenteditable]').removeAttr('contenteditable');
+    });
+
+    // Edit button functionality for Kabe Store
+    $(document).on('click', '#kabeTable .edit-btn', function(){
+      var $row = $(this).closest('tr');
+      $row.find('td').each(function(index, cell){
+        if ($(cell).index() !== 0 && $(cell).index() !== $row.find('td').length - 1) {
+          var text = $(cell).children().val() || $(cell).text();
+          $(cell).html('<textarea class="form-control time-input" rows="1" maxlength="8">' + text + '</textarea>');
+        } else if ($(cell).index() === 0) {
+          var text = $(cell).children().text() || $(cell).text();
+          $(cell).html('<div class="form-control" contenteditable="true">' + text + '</div>');
+        }
+      });
+      $row.find('div[contenteditable]').attr('contenteditable', 'true');
+    });
+
+    // Export Nagata Data
+    $('#exportNagataData').click(function(){
+      var csvContent = tableToCSV($('#nagataTable'));
+      downloadCSV(csvContent, 'nagata_data.csv');
+    });
+
+    // Export Kabe Data
+    $('#exportKabeData').click(function(){
+      var csvContent = tableToCSV($('#kabeTable'));
+      downloadCSV(csvContent, 'kabe_data.csv');
+    });
+
+    // Add event listener for time inputs
+    $(document).on('input', '.time-input', function() {
+      var inputValue = $(this).val();
+      // Format the input value to HH:MM:SS
+      var formattedValue = formatTime(inputValue);
+      // Update the input value with the formatted one
+      $(this).val(formattedValue);
+    });
+
+    function formatTime(timeString) {
+      // Remove any non-digit characters
+      var cleanedTime = timeString.replace(/\D/g, '');
+      // Insert colons at appropriate positions
+      if (cleanedTime.length >= 3) {
+        cleanedTime = cleanedTime.slice(0, 2) + ':' + cleanedTime.slice(2);
+      }
+      if (cleanedTime.length >= 5) {
+        cleanedTime = cleanedTime.slice(0, 5) + ':' + cleanedTime.slice(5);
+      }
+      return cleanedTime;
+    }
+  });
+
+  $(document).ready(function() {
+  // Add event listener for arrow key navigation
+  $('#nagataTableBody, #kabeTableBody').on('keydown', 'textarea.time-input', function(e) {
+    var $this = $(this);
+    var $cell = $this.closest('td');
+    var $row = $this.closest('tr');
+
+    // Move to the previous cell on left arrow key press
+    if (e.which === 37) {
+      var $prevCell = $cell.prev('td');
+      if ($prevCell.length > 0) {
+        $prevCell.find('textarea.time-input').focus();
+      }
+    }
+    // Move to the next cell on right arrow key press
+    else if (e.which === 39) {
+      var $nextCell = $cell.next('td');
+      if ($nextCell.length > 0) {
+        $nextCell.find('textarea.time-input').focus();
+      }
+    }
+  });
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const videoPlayer = document.getElementById('videoPlayer');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const increaseSpeedBtn = document.getElementById('increaseSpeedBtn');
+    const decreaseSpeedBtn = document.getElementById('decreaseSpeedBtn');
+    const speedIndicator = document.getElementById('speedIndicator');
+    
+
+   /* playPauseBtn.addEventListener('click', function() {
+      togglePlayPause();
+    });
+    */
+    increaseSpeedBtn.addEventListener('click', function() {
+      changePlaybackSpeed(0.5);
+    });
+    
+    decreaseSpeedBtn.addEventListener('click', function() {
+      changePlaybackSpeed(-0.5);
+    });
+
+    document.addEventListener('keydown', function(event) {
+      // Spacebar to toggle play/pause
+      if (event.code === 'Space') {
+        event.preventDefault(); // Prevent default behavior
+        togglePlayPause();
+      }
+      // Up arrow to skip forward 5 seconds
+      else if (event.code === 'ArrowDown') {
+        event.preventDefault(); // Prevent default behavior
+        videoPlayer.currentTime += 5;
+      }
+      // Down arrow to skip backward 5 seconds
+      else if (event.code === 'ArrowUp') {
+        event.preventDefault(); // Prevent default behavior
+        videoPlayer.currentTime -= 5;
+      }
+    });
+    
+    function togglePlayPause() {
+      if (videoPlayer.paused || videoPlayer.ended) {
+        videoPlayer.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        videoPlayer.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    }
+    
+    function changePlaybackSpeed(speedChange) {
+      videoPlayer.playbackRate += speedChange;
+      updateSpeedIndicator();
+    }
+      
+
+
+
+    playPauseBtn.addEventListener('click', function() {
+      if (videoPlayer.paused || videoPlayer.ended) {
+        videoPlayer.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        videoPlayer.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    });
+    
+    increaseSpeedBtn.addEventListener('click', function() {
+      videoPlayer.playbackRate += 0.5;
+      updateSpeedIndicator();
+    });
+    
+    decreaseSpeedBtn.addEventListener('click', function() {
+      videoPlayer.playbackRate -= 0.5;
+      updateSpeedIndicator();
+    });
+    
+    function updateSpeedIndicator() {
+      speedIndicator.textContent = 'Speed: ' + videoPlayer.playbackRate.toFixed(1) + 'x';
+    }
+    
+    // Add event listener to load video file
+    const fileInput = document.querySelector('.file-input');
+    fileInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      const objectURL = URL.createObjectURL(file);
+      videoPlayer.src = objectURL;
+    });
+  });
+
+
+  </script>
+</body>
+</html>
